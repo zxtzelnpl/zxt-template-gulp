@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    @@include('./template/head.html')
+    <title>Title</title>
+    <link rel="stylesheet" href="/dist/css/index.css">
+</head>
+<body>
+    <div class="container">
+        @@include('./template/view.html')
+        @@include('./template/var.html', {
+            "name": "haoxin",
+            "age": 12345,
+            "socials": {
+                "fb": "facebook.com/include",
+                "tw": "twitter.com/include"
+            }
+        })
+    </div>
+
+</body>
+<script src="/dist/javascript/index.js"></script>
+</html>
