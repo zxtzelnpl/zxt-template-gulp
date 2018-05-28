@@ -1,3 +1,5 @@
+'use strict';
+
 const gulp = require('gulp');
 const plumber = require('gulp-plumber')
 const browserSync = require('browser-sync').create();
@@ -8,10 +10,8 @@ const autoprefix = new LessAutoprefix({browsers: ['IOS>7', 'last 4 ChromeAndroid
 const sourcemaps = require('gulp-sourcemaps');
 
 const config = require('./gulp.config.js');
-const html = config.html;
-const style = config.style;
-const javascript = config.javascript;
 
+const {html,style,javascript} = config;
 
 function dev() {
 
