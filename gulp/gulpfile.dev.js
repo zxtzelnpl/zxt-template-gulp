@@ -34,6 +34,7 @@ function dev() {
         prefix: '@@',
         basepath: '@file'
       }))
+      .pipe($.htmlmin({collapseWhitespace: true}))
       .pipe(gulp.dest(config.html.to))
       .pipe(browserSync.stream())
   })
@@ -91,8 +92,9 @@ function dev() {
       directory: true
     })
 
-    gulp.watch(style.watch, ['style:dev'])
+    gulp.watch(style.watch, ['style:dev']);
     gulp.watch(html.watch,['html:dev']);
+    gulp.watch([javascript.tools,javascript.plugins],['plugins:dev']);
     gulp.watch(javascript.watch,['javascript:dev']);
   })
 }
