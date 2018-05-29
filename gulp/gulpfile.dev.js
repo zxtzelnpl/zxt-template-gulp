@@ -23,7 +23,6 @@ function dev() {
     'bb >= 10'
   ];
 
-
   /**
    * html
    */
@@ -53,7 +52,6 @@ function dev() {
       .pipe(gulp.dest(style.to))
       .pipe(browserSync.stream())
   })
-
 
   /**
    * javascript
