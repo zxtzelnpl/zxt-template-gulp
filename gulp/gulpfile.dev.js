@@ -1,27 +1,36 @@
 'use strict';
 
+const path = require('path');
 const gulp = require('gulp');
-const plumber = require('gulp-plumber')
 const browserSync = require('browser-sync').create();
-const fileinclude = require('gulp-file-include');
-const less = require('gulp-less');
-const LessAutoprefix = require('less-plugin-autoprefix');
-const autoprefix = new LessAutoprefix({browsers: ['IOS>7', 'last 4 ChromeAndroid versions']})
-const sourcemaps = require('gulp-sourcemaps');
-
+const $ = require('gulp-load-plugins')();
+const pkg = require('../package.json')
 const config = require('./gulp.config.js');
 
 const {html,style,javascript} = config;
 
 function dev() {
 
+  const AUTOPREFIXER_BROWSERS = [
+    'ie >= 10',
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 4.4',
+    'bb >= 10'
+  ];
+
+
   /**
    * html
    */
-  gulp.task('html:dev', function () {
+  gulp.task('html:dev', () => {
     gulp.src(html.from)
-      .pipe(plumber())
-      .pipe(fileinclude({
+      .pipe($.plumber())
+      .pipe($.fileInclude({
         prefix: '@@',
         basepath: '@file'
       }))
@@ -32,14 +41,14 @@ function dev() {
   /**
    * style
    */
-  gulp.task('style:dev', function () {
+  gulp.task('style:dev', () => {
     return gulp.src(style.from)
-      .pipe(plumber())
-      .pipe(sourcemaps.init())
-      .pipe(less({
-        plugins: [autoprefix]
-      }))
-      .pipe(sourcemaps.write('./'))
+      .pipe($.plumber())
+      .pipe($.sourcemaps.init())
+      .pipe($.less())
+      .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
+      .pipe($.cssnano())
+      .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(style.to))
       .pipe(browserSync.stream())
   })
@@ -48,9 +57,26 @@ function dev() {
   /**
    * javascript
    */
-  gulp.task('javascript:dev', function () {
+  gulp.task('javascript:dev', () => {
     return gulp.src(javascript.from)
-      .pipe(plumber())
+      .pipe($.plumber())
+      .pipe($.sourcemaps.init())
+      .pipe($.uglify())
+      .pipe($.sourcemaps.write('.'))
+      .pipe(gulp.dest(javascript.to))
+      .pipe(browserSync.stream())
+  })
+
+  /**
+   * plugins
+   */
+  gulp.task('plugins:dev',()=>{
+    return gulp.src([javascript.tools,javascript.plugins])
+      .pipe($.plumber())
+      .pipe($.sourcemaps.init())
+      .pipe($.concat('plugins.min.js'))
+      .pipe($.uglify())
+      .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest(javascript.to))
       .pipe(browserSync.stream())
   })
@@ -58,7 +84,7 @@ function dev() {
   /**
    * serve
    */
-  gulp.task('serve', ['style:dev','javascript:dev','html:dev'], function () {
+  gulp.task('serve', ['style:dev','plugins:dev','javascript:dev','html:dev'], () => {
     browserSync.init({
       server: config.root,
       notify: false,

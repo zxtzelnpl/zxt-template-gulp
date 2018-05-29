@@ -1,9 +1,11 @@
 const paths={
   root:'./',
   javascript:{
-    from:'src/javascript/**/*.js',
+    from:'src/javascript/*.js',
     to:'dist/javascript',
-    watch:'src/javascript/**/*.js',
+    watch:'src/javascript/*.js',
+    plugins:'src/javascript/plugins/*.js',
+    tools:'src/javascript/tools/*.js',
     exclude:''
   },
   style:{
