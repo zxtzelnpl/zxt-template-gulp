@@ -90,10 +90,6 @@ function dev() {
     gulp.watch([javascript.tools,javascript.plugins],['plugins:dev']);
     gulp.watch(javascript.watch,['javascript:dev']);
   })
-
-  gulp.task('default', ['serve'],()=>{
-    console.log('Default service is start');
-  });
 }
 
 module.exports = dev;

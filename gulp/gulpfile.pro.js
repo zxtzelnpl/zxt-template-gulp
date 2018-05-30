@@ -79,6 +79,13 @@ function pro() {
   gulp.task('produce', ['html:pro', 'style:pro', 'javascript:pro', 'plugins:pro'], () => {
     console.log('now every things is fine');
   })
+
+  /**
+   * finally produce the files by default
+   */
+  gulp.task('default', ['produce'],()=>{
+    console.log('Default produce is start');
+  });
 }
 
 module.exports = pro;
