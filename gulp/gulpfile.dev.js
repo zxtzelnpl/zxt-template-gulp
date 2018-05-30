@@ -1,39 +1,34 @@
 'use strict';
 
-const path = require('path');
 const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
-const $ = require('gulp-load-plugins')();
-const pkg = require('../package.json')
 const config = require('./gulp.config.js');
 
-const {html,style,javascript} = config;
+const plumber = require('gulp-plumber');
+const fileInclude = require('gulp-file-include');
+const htmlMin = require('gulp-htmlmin');
+const sourceMaps = require('gulp-sourcemaps');
+const less = require('gulp-less');
+const autoprefixer = require('gulp-autoprefixer');
+const nano = require('gulp-cssnano');
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
+
+const {html,style,javascript,AUTOPREFIXER_BROWSERS} = config;
 
 function dev() {
-
-  const AUTOPREFIXER_BROWSERS = [
-    'ie >= 10',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-  ];
 
   /**
    * html
    */
   gulp.task('html:dev', () => {
     gulp.src(html.from)
-      .pipe($.plumber())
-      .pipe($.fileInclude({
+      .pipe(plumber())
+      .pipe(fileInclude({
         prefix: '@@',
         basepath: '@file'
       }))
-      .pipe($.htmlmin({collapseWhitespace: true}))
+      .pipe(htmlMin({collapseWhitespace: true}))
       .pipe(gulp.dest(config.html.to))
       .pipe(browserSync.stream())
   })
@@ -43,12 +38,12 @@ function dev() {
    */
   gulp.task('style:dev', () => {
     return gulp.src(style.from)
-      .pipe($.plumber())
-      .pipe($.sourcemaps.init())
-      .pipe($.less())
-      .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
-      .pipe($.cssnano())
-      .pipe($.sourcemaps.write('./'))
+      .pipe(plumber())
+      .pipe(sourceMaps.init())
+      .pipe(less())
+      .pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
+      .pipe(nano())
+      .pipe(sourceMaps.write('./'))
       .pipe(gulp.dest(style.to))
       .pipe(browserSync.stream())
   })
@@ -58,10 +53,10 @@ function dev() {
    */
   gulp.task('javascript:dev', () => {
     return gulp.src(javascript.from)
-      .pipe($.plumber())
-      .pipe($.sourcemaps.init())
-      .pipe($.uglify())
-      .pipe($.sourcemaps.write('.'))
+      .pipe(plumber())
+      .pipe(sourceMaps.init())
+      .pipe(uglify())
+      .pipe(sourceMaps.write('.'))
       .pipe(gulp.dest(javascript.to))
       .pipe(browserSync.stream())
   })
@@ -71,11 +66,11 @@ function dev() {
    */
   gulp.task('plugins:dev',()=>{
     return gulp.src([javascript.tools,javascript.plugins])
-      .pipe($.plumber())
-      .pipe($.sourcemaps.init())
-      .pipe($.concat('plugins.min.js'))
-      .pipe($.uglify())
-      .pipe($.sourcemaps.write('.'))
+      .pipe(plumber())
+      .pipe(sourceMaps.init())
+      .pipe(concat('plugins.min.js'))
+      .pipe(uglify())
+      .pipe(sourceMaps.write('.'))
       .pipe(gulp.dest(javascript.to))
       .pipe(browserSync.stream())
   })
@@ -95,8 +90,10 @@ function dev() {
     gulp.watch([javascript.tools,javascript.plugins],['plugins:dev']);
     gulp.watch(javascript.watch,['javascript:dev']);
   })
-}
 
-gulp.task('default', ['serve']);
+  gulp.task('default', ['serve'],()=>{
+    console.log('Default service is start');
+  });
+}
 
 module.exports = dev;
