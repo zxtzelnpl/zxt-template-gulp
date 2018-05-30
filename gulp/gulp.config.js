@@ -1,24 +1,29 @@
+const dist = 'dist';
+const src = 'src';
+
 const config={
   root:'./',
+  dist:`${dist}/`,
+  src:`${src}/`,
   javascript:{
-    from:'src/javascript/*.js',
-    to:'dist/javascript',
-    watch:'src/javascript/*.js',
-    plugins:'src/javascript/plugins/*.js',
-    tools:'src/javascript/tools/*.js',
-    exclude:''
+    from:`${src}/javascript/*.js`,
+    to:`${dist}/javascript`,
+    watch:`${src}/javascript/*.js`,
+    plugins:`${src}/javascript/plugins/*.js`,
+    tools:`${src}/javascript/tools/*.js`,
+    exclude:``
   },
   style:{
-    from:'src/less/*.less',
-    to:'dist/css',
-    watch:'src/less/**/*.less',
-    exclude:''
+    from:`${src}/less/*.less`,
+    to:`${dist}/css`,
+    watch:`${src}/less/**/*.less`,
+    exclude:``
   },
   html:{
-    from:'src/*.html',
-    to:'dist',
-    watch:'src/**/*.html',
-    exclude:'src/template/*.html'
+    from:`${src}/*.html`,
+    to:`${dist}`,
+    watch:`${src}/**/*.html`,
+    exclude:`${src}/template/*.html`
   },
   AUTOPREFIXER_BROWSERS:[
     'ie >= 10',

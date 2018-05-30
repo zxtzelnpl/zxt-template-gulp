@@ -1,5 +1,4 @@
 'use strict';
-
 const gulp = require('gulp');
 const config = require('./gulp.config.js');
 
@@ -10,10 +9,12 @@ const autoprefixer = require('gulp-autoprefixer');
 const nano = require('gulp-cssnano');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
+const del = require('del');
 
-const {html,style,javascript,AUTOPREFIXER_BROWSERS} = config;
-const UGLIFY_OPTION = {compress:{drop_console:true}}
-function pro () {
+const {dist, html, style, javascript, AUTOPREFIXER_BROWSERS} = config;
+const UGLIFY_OPTION = {compress: {drop_console: true}}
+
+function pro() {
   /**
    * html
    */
@@ -50,14 +51,32 @@ function pro () {
   /**
    * plugins
    */
-  gulp.task('plugins:pro',()=>{
-    return gulp.src([javascript.tools,javascript.plugins])
+  gulp.task('plugins:pro', () => {
+    return gulp.src([javascript.tools, javascript.plugins])
       .pipe(concat('plugins.min.js'))
       .pipe(uglify(UGLIFY_OPTION))
       .pipe(gulp.dest(javascript.to))
   })
 
-  gulp.task('produce',['html:pro','style:pro','javascript:pro','plugins:pro'],()=>{
+  /**
+   * Clean output directory
+   */
+  gulp.task('clean', () => {
+    del([dist]).then(paths => {
+      if(paths.length!==0){
+        console.log('Deleted files and folders:\n', paths.join('\n'));
+      }
+      else{
+        console.log('The dir does not exists');
+      }
+
+    })
+  })
+
+  /**
+   * finally produce the files
+   */
+  gulp.task('produce', ['html:pro', 'style:pro', 'javascript:pro', 'plugins:pro'], () => {
     console.log('now every things is fine');
   })
 }
