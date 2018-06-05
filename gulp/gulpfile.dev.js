@@ -16,7 +16,6 @@ const concat = require('gulp-concat');
 
 const {html,style,javascript,AUTOPREFIXER_BROWSERS} = config;
 
-//TODO 加上hash
 function dev() {
 
   /**

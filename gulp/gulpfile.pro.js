@@ -10,6 +10,7 @@ const nano = require('gulp-cssnano');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const del = require('del');
+const rev = require('gulp-rev');
 
 const {dist, html, style, javascript, AUTOPREFIXER_BROWSERS} = config;
 const UGLIFY_OPTION = {compress: {drop_console: true}}
