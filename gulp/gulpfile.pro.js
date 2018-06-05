@@ -14,6 +14,7 @@ const del = require('del');
 const {dist, html, style, javascript, AUTOPREFIXER_BROWSERS} = config;
 const UGLIFY_OPTION = {compress: {drop_console: true}}
 
+//TODO 加上hash
 function pro() {
   /**
    * html
