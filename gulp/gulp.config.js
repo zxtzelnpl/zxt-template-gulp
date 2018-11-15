@@ -22,6 +22,8 @@ const config={
   html:{
     from:`${src}/*.html`,
     to:`${dist}`,
+    template:`${src}/template/*.html`,
+    hbs:`${src}/*.hbs`,
     watch:`${src}/**/*.html`,
     exclude:`${src}/template/*.html`
   },
